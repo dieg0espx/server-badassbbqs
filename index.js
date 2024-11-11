@@ -11,33 +11,37 @@ app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const AFFIRM_PRIVATE_API_KEY = process.env.AFFIRM_PRIVATE_API_KEY
+
+
 
 app.post('/api/confirm', async (req, res) => {
-    // const checkoutToken = req.body.checkout_token;
+    const checkoutToken = req.body.checkout_token;
     console.log(req.body);
+    console.log(AFFIRM_PRIVATE_API_KEY);
     
-  
-    // try {
-    //   // Make a request to Affirm to authorize the charge
-    //   const response = await axios.post('https://sandbox.affirm.com/api/v2/charges', {
-    //     checkout_token: checkoutToken,
-    //   }, {
-    //     headers: {
-    //       Authorization: `Bearer xdLBMW2WoNSmbwjKN9WFh1jVWm3EVEz5`,
-    //       'Content-Type': 'application/json',
-    //     },
-    //   });
-    //   // Handle success
-    //   res.status(200).json({ message: 'Payment authorized', data: response.data });
-    // } catch (error) {
-    //   console.error('Error authorizing payment:', JSON.stringify(error));
-    //   res.status(500).json({ message: 'Payment authorization failed', error: error.message });
-    // }
+
+    try {
+      // Make a request to Affirm to authorize the charge
+      const response = await axios.post('https://sandbox.affirm.com/api/v2/charges', {
+        checkout_token: checkoutToken,
+      }, {
+        headers: {
+          Authorization: `Bearer ${AFFIRM_PRIVATE_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      // Handle success
+      res.status(200).json({ message: 'Payment authorized', data: response.data });
+    } catch (error) {
+      console.error('Error authorizing payment:', JSON.stringify(error));
+      res.status(500).json({ message: 'Payment authorization failed', error: error.message });
+    }
   });
 
 
   app.post('/api/test-affirm', async (req, res) => {
-    console.log("Affirm API Key:", process.env.AFFIRM_PRIVATE_API_KEY); // Debug log
+    
   
     try {
       const checkoutToken = '0TKTNYJ36HZLZKCP';
