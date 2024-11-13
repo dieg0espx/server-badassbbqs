@@ -47,6 +47,24 @@
         padding: 3px;
         margin-left: 5px;
     }
+
+    .product-item {
+      display: grid;
+      grid-template-columns: 80px auto;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+    }
+    .product-item:last-child {
+      border-bottom: none;
+    }
+    .product-item img {
+      width: 80px;
+      height: auto;
+      margin-right: 20px;
+    }
+
+
     .product-table th, .product-table td {
       padding: 10px;
       border: 1px solid #ddd;
@@ -73,6 +91,13 @@
         text-align: center;
         font-size: 20px;
     }
+
+    .grid {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
     @media only screen and (max-width: 600px) {
       .email-container {
         width: 95%;
@@ -95,13 +120,48 @@
       <h1>Thanks for your order!</h1>
     </div>
 
-    <div class="user-info">
+    {{!-- <div class="user-info">
       <p><strong>Order Summary:</strong></p>
       <br>
       <p><b>Name:</b> {{name}}</p>
       <p><b>Address:</b> {{address}}</p>
       <p><b>Phone:</b> {{phone}}</p>
       <p><b>Email:</b> {{email}}</p>
+    </div>  --}}
+
+    <div class="user-info">
+      <p><strong>Shipping Information:</strong></p>
+      {{!-- <div class="grid">
+        <div>
+          <p><b>Full Name:</b> {{name}}</p>
+          <p><b>Email Address:</b> {{email}}</p>
+          <p><b>Phone Number:</b> {{phone}}</p>
+        </div>
+        <div>
+          <p><b>Address:</b> {{address}}</p>
+          <p><b>City:</b> {{city}} <b>State:</b> {{state}}</p>
+          <p><b>Country:</b> {{country}} <b>Postal Code:</b> {{postalCode}}</p>
+        </div>
+      </div>  --}}
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>Full Name:</b> {{name}}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>Address:</b> {{address}}</td>  
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>Phone:</b> {{phone}}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>City:</b> {{city}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>Email:</b> {{email}}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>State:</b> {{state}}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>PC:</b> {{postalCode}}</td>
+          <td style="padding: 8px; border: 1px solid #ddd;"><b>Country:</b> {{country}}</td>
+        </tr>
+      </table>
+
     </div>
 
     <div class="product-table">
@@ -118,15 +178,16 @@
             <tr>
              <td style="width: 80px; text-align:center;"><img src="{{this.imageUrl}}" alt="{{this.title}}" width="80"></td>
              <td style="width: auto;">{{this.title}}</td>
-             <td style="width: 80px; text-align:center;">${{this.price}}</td>
+             <td style="width: 80px; text-align:center;">{{this.price}}</td>
             </tr>
           {{/each}}
         </tbody>
       </table>
     </div>
 
+
     <div class="total">
-      <p><strong>Total:</strong> ${{total}} USD</p>
+      <p><strong>Total:</strong> {{total}} USD</p>
     </div>
 
     <div class="footer">

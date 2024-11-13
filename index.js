@@ -12,7 +12,7 @@
   dotenv.config();
 
   const app = express();
-  app.use(cors({ origin: 'https://bad-ass-bb-qs-ecommerce.vercel.app' }));
+  app.use(cors({ origin: '*' }));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -44,30 +44,7 @@
   });
 
   app.post('/newPurchase', async (req, res) => {
-    const orderData = {
-      name: "John Doe",
-      address: "1234 BBQ St, Grill Town, FL 56789",
-      phone: "123-456-7890",
-      email: "tecnodael@gmail.com",
-      total: "149.99",
-      products: [
-        {
-          imageUrl: "https://via.placeholder.com/80",
-          title: "Smoky BBQ Grill",
-          price: "99.99"
-        },
-        {
-          imageUrl: "https://via.placeholder.com/80",
-          title: "BBQ Sauce Set",
-          price: "25.00"
-        },
-        {
-          imageUrl: "https://via.placeholder.com/80",
-          title: "Grill Brush",
-          price: "25.00"
-        }
-      ]
-    };
+    const orderData = req.body.orderData
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -97,9 +74,10 @@
 
     try {
       await transporter.sendMail(customerMailOptions);
-      res.status(200).send('EMAIL SENT ');
+      res.status(200).send({ message: 'EMAIL SENT!' });
     } catch (error) {
       console.error('ERROR SENDING MAIL: ', error);
+      res.send({ message: 'ERROR SENDING MAIL: ' +  error });
     }
   });
 
