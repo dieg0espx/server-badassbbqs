@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      border: 1px solid lightgray;
+      border-radius: 10px;
+    }
+    .email-container {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 1px solid lightgray;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .header {
+      text-align: center;
+      background-color: #980f0f;
+      padding: 20px;
+      color: #ffffff;
+      border-radius: 8px 8px 0 0;
+    }
+    .header img {
+      width: 150px;
+      height: 150px;
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .user-info, .product-table {
+      width: 100%;
+      margin-top: 20px;
+    }
+    .user-info p {
+        margin: 0;
+        padding: 3px;
+        margin-left: 5px;
+    }
+    .product-table th, .product-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    .product-table th {
+      background-color: #f2f2f2;
+    }
+    .product-table colgroup col:nth-child(1) {
+      width: 50px;
+    }
+    .product-table colgroup col:nth-child(3) {
+      width: 50px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #777777;
+    }
+
+    .total {
+        text-align: center;
+        font-size: 20px;
+    }
+    @media only screen and (max-width: 600px) {
+      .email-container {
+        width: 95%;
+        padding: 10px;
+      }
+      .header h1 {
+        font-size: 1.5em;
+      }
+      .product-table th, .product-table td {
+        font-size: 0.9em;
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <img src="https://uctubrwiseslmvruhqof.supabase.co/storage/v1/object/public/Images/logo.png" alt="Company Logo" />
+      <h1>Thanks for your order!</h1>
+    </div>
+
+    <div class="user-info">
+      <p><strong>Order Summary:</strong></p>
+      <br>
+      <p><b>Name:</b> {{name}}</p>
+      <p><b>Address:</b> {{address}}</p>
+      <p><b>Phone:</b> {{phone}}</p>
+      <p><b>Email:</b> {{email}}</p>
+    </div>
+
+    <div class="product-table">
+      <table width="100%">
+        <thead>
+          <tr>
+            <th style="text-align:center;">Product</th>
+            <th style="text-align:center;">Title</th>
+            <th style="text-align:center;">Price</th>
+          </tr> 
+        </thead>
+        <tbody>
+          {{#each products}}
+            <tr>
+             <td style="width: 80px; text-align:center;"><img src="{{this.imageUrl}}" alt="{{this.title}}" width="80"></td>
+             <td style="width: auto;">{{this.title}}</td>
+             <td style="width: 80px; text-align:center;">${{this.price}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total">
+      <p><strong>Total:</strong> ${{total}} USD</p>
+    </div>
+
+    <div class="footer">
+      <p>If you have any questions, please contact us at support@badassbbqs.com</p>
+      <p>Thank you for shopping with BadassBBQs!</p>
+    </div>
+  </div>
+</body>
+</html>
