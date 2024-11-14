@@ -108,10 +108,12 @@
       to: 'tecnodael@gmail.com',
       subject: 'Badass BBQs - Contact Form',
       template: 'contactForm',
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      message: data.message
+      context: {
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: data.message
+      }
     };
 
     try {
