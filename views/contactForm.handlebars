@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Contact Form Submission</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .info {
+      margin-bottom: 15px;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="https://uctubrwiseslmvruhqof.supabase.co/storage/v1/object/public/Images/logo.png" alt="Logo" style="width: 100px;">
+    </div>
+
+    <h2 style="text-align: center; color: #333;">New Contact Form Submission</h2>
+
+    <!-- User Information -->
+    <div class="info">
+      <p><span class="label">Name:</span> {{name}}</p>
+    </div>
+    <div class="info">
+      <p><span class="label">Email:</span> {{email}}</p>
+    </div>
+    <div class="info">
+      <p><span class="label">Message:</span></p>
+      <p>{{message}}</p>
+    </div>
+  </div>
+
+</body>
+</html>

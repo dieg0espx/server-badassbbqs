@@ -82,6 +82,45 @@
   });
 
 
+  app.post('/contactForm', async (req, res) => {
+    const data = req.body.data
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'tecnodael@gmail.com',
+            pass: 'fgfqjqbvkmbatyrn'
+        }
+    });
+        
+    const handlebarOptions = {
+      viewEngine: {
+          extName: '.handlebars',
+          partialsDir: path.resolve('./views'),
+          defaultLayout: false,
+      },
+      viewPath: path.resolve('./views'),
+      extName: '.handlebars',
+    };
+    
+    transporter.use('compile', hbs(handlebarOptions));
+    const customerMailOptions = {
+      from: 'tecnodael@gmail.com',
+      to: 'tecnodael@gmail.com',
+      subject: 'Badass BBQs - Contact Form',
+      template: 'contactForm',
+      context: data
+    };
+
+    try {
+      await transporter.sendMail(customerMailOptions);
+      res.status(200).send({ message: 'EMAIL SENT!' });
+    } catch (error) {
+      console.error('ERROR SENDING MAIL: ', error);
+      res.send({ message: 'ERROR SENDING MAIL: ' +  error });
+    }
+  });
+
+
     
   app.listen(8080, () => {
       console.log(`Server running on http://localhost:8080`);
