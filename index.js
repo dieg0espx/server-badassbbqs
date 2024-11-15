@@ -20,39 +20,18 @@
   const AFFIRM_PUBLIC_API_KEY = process.env.AFFIRM_PUBLIC_API_KEY
 
 
-  app.post('/api/confirm', async (req, res) => {
-      const checkoutToken = req.body.checkout_token;
-      console.log(req.body);
-      console.log(AFFIRM_PRIVATE_API_KEY);
-      try {
-        // Make a request to Affirm to authorize the charge
-        const response = await axios.post('https://sandbox.affirm.com/api/v2/charges', {
-          checkout_token: checkoutToken,
-        }, {
-          headers: {
-            Authorization: `Bearer ${AFFIRM_PRIVATE_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        // Handle success
-        res.status(200).json({ message: 'Payment authorized', data: response.data });
-      } catch (error) {
-        console.error('Error authorizing payment:', JSON.stringify(error));
-        res.status(500).json({ message: 'Payment authorization failed', error: error.message });
-      }
-  });
-
+  // ===== AFFIRM ===== //
+ 
   app.post('/api/confirm-order', (req, res) => {
     const checkoutToken = req.body.checkout_token;
     console.log(checkoutToken);
-    
   
     if (!checkoutToken) {
       return res.status(400).json({ error: 'No checkout token provided' });
     }
   
     // Redirect to the frontend confirmation page with the checkout token as a URL parameter
-    res.redirect(`http://localhost:3000/checkout-confirmation?checkout_token=${checkoutToken}`);
+    res.redirect(`https://bad-ass-bb-qs-ecommerce.vercel.app/checkout-confirmation?checkout_token=${checkoutToken}`);
   });
 
   app.post('/api/authorize-charge', async (req, res) => {
@@ -81,6 +60,9 @@
     }
   });
 
+
+
+  // ======= EMAIL FORWARD ======= //
   app.post('/newPurchase', async (req, res) => {
     const orderData = req.body.orderData
     const transporter = nodemailer.createTransport({
