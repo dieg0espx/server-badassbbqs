@@ -42,17 +42,31 @@
       }
   });
 
+  app.post('/api/confirm-order', (req, res) => {
+    const checkoutToken = req.body.checkout_token;
+    console.log(checkoutToken);
+    
+  
+    if (!checkoutToken) {
+      return res.status(400).json({ error: 'No checkout token provided' });
+    }
+  
+    // Redirect to the frontend confirmation page with the checkout token as a URL parameter
+    res.redirect(`http://localhost:3000/checkout-confirmation?checkout_token=${checkoutToken}`);
+  });
+
   app.post('/api/authorize-charge', async (req, res) => {
     const { checkoutToken } = req.body;
+    console.log(checkoutToken);
+    
   
     try {
       const response = await axios.post('https://sandbox.affirm.com/api/v2/charges', {
         checkout_token: checkoutToken,
-        order_id: 'YOUR_ORDER_ID', // Optional: Replace with your order ID if needed
       }, {
         auth: {
-          username: AFFIRM_PUBLIC_API_KEY, // Affirm sandbox public API key
-          password: AFFIRM_PRIVATE_API_KEY, // Affirm sandbox private API key
+          username:'ENJBDHG33UOBFFPO', // Affirm sandbox public API key
+          password:'xdLBMW2WoNSmbwjKN9WFh1jVWm3EVEz5', // Affirm sandbox private API key
         },
       });
   
