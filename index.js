@@ -8,6 +8,9 @@
   import path from 'path';
   import nodemailer from 'nodemailer'
 
+  import {openai } from 'openai';
+
+
 
   dotenv.config();
 
@@ -22,6 +25,7 @@
   const openaiApiKey = process.env.OPEN_AI_SECRET_KEY;
 
   const openaiClient = new openai.OpenAI({ apiKey: openaiApiKey });
+
 
 
   // ===== AFFIRM ===== //
