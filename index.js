@@ -8,7 +8,7 @@
   import path from 'path';
   import nodemailer from 'nodemailer'
 
-  import {openai } from 'openai';
+  import { Configuration, OpenAIApi } from 'openai';
 
 
 
@@ -22,9 +22,15 @@
   const AFFIRM_PRIVATE_API_KEY = process.env.AFFIRM_PRIVATE_API_KEY
   const AFFIRM_PUBLIC_API_KEY = process.env.AFFIRM_PUBLIC_API_KEY
 
-  const openaiApiKey = process.env.OPEN_AI_SECRET_KEY;
+  
 
-  const openaiClient = new openai.OpenAI({ apiKey: openaiApiKey });
+  const openaiApiKey = process.env.OPEN_AI_SECRET_KEY;
+  
+  const configuration = new Configuration({
+    apiKey: openaiApiKey,
+  });
+  
+  const openaiClient = new OpenAIApi(configuration);
 
 
 
@@ -154,23 +160,26 @@
 
 
   // ========= OPEN AI ========= //
-  app.post('/generate-text', async (req, res) => {
-    const { prompt } = req.body;
-    console.log(prompt);
-    try {
-        const response = await openaiClient.completions.create({
-            model: "gpt-3.5-turbo-instruct", 
-            prompt: prompt, 
-            max_tokens: 2000,
-        });
-        const generatedText = response.choices[0].text;
-        res.status(200).json(generatedText.trimStart());
-    } catch (error) {
-        console.error('Error generating text:', error);
-        res.status(500).json({ error: 'An error occurred while generating text' });
-    }
-});
 
+  
+  app.post('/generate-text', async (req, res) => {
+      const { prompt } = req.body;
+      console.log(prompt);
+  
+      try {
+          const response = await openaiClient.createChatCompletion({
+              model: "gpt-3.5-turbo", 
+              messages: [{ role: "user", content: prompt }], 
+              max_tokens: 2000,
+          });
+          const generatedText = response.data.choices[0].message.content;
+          res.status(200).json({ text: generatedText.trim() });
+      } catch (error) {
+          console.error('Error generating text:', error);
+          res.status(500).json({ error: 'An error occurred while generating text' });
+      }
+  });
+  
 
     
   app.listen(8080, () => {
