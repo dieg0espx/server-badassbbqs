@@ -64,6 +64,9 @@
 
   // ======= AUTHORIZE.NET ======= //  
   app.post("/api/payment", async (req, res) => {
+    console.log("API Login ID:", process.env.AUTHORIZE_API_LOGIN_ID);
+console.log("Transaction Key:", process.env.AUTHORIZE_TRANSACTION_KEY);
+
     const { opaqueData, amount } = req.body;
   
     try {
