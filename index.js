@@ -64,25 +64,16 @@
 
   // ======= AUTHORIZE.NET ======= //  
   app.post("/api/payment", async (req, res) => {
-    console.log("API Login ID:", process.env.AUTHORIZE_API_LOGIN_ID);
-console.log("Transaction Key:", process.env.AUTHORIZE_TRANSACTION_KEY);
-
     const { opaqueData, amount } = req.body;
   
     try {
-      if (!process.env.AUTHORIZE_API_LOGIN_ID || !process.env.AUTHORIZE_TRANSACTION_KEY) {
-        throw new Error("Missing API Login ID or Transaction Key in environment variables.");
-      }
-  
-      console.log("Sending request to Authorize.net...");
-  
       const response = await axios.post(
-        "https://apitest.authorize.net/xml/v1/request.api",
+        "https://apitest.authorize.net/xml/v1/request.api", // Use the sandbox endpoint for testing
         {
           createTransactionRequest: {
             merchantAuthentication: {
-              name: process.env.AUTHORIZE_API_LOGIN_ID,
-              transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY,
+              name: process.env.AUTHORIZE_API_LOGIN_ID, // API Login ID
+              transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY, // Transaction Key
             },
             transactionRequest: {
               transactionType: "authCaptureTransaction",
@@ -91,21 +82,18 @@ console.log("Transaction Key:", process.env.AUTHORIZE_TRANSACTION_KEY);
                 opaqueData,
               },
             },
-          }
+          },
         }
       );
   
       if (response.data.messages.resultCode === "Ok") {
-        console.log("Transaction Successful:", response.data.transactionResponse.transId);
         res.status(200).json({
           transactionId: response.data.transactionResponse.transId,
         });
       } else {
-        console.error("Transaction Failed:", response.data.messages.message[0].text);
         throw new Error(response.data.messages.message[0].text);
       }
     } catch (error) {
-      console.error("Error:", error.message);
       res.status(500).json({ error: error.message });
     }
   });
