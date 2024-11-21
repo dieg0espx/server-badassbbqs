@@ -62,7 +62,46 @@
   });
 
 
+  // ======= AUTHORIZE.NET ======= //  
+  app.post("/api/payment", async (req, res) => {
+    const { opaqueData, amount } = req.body;
+  
+    try {
+      const response = await axios.post(
+        "https://apitest.authorize.net/xml/v1/request.api",
+        {
+          createTransactionRequest: {
+            merchantAuthentication: {
+              name: process.env.AUTHORIZE_API_LOGIN_ID,
+              transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY,
+            },
+            transactionRequest: {
+              transactionType: "authCaptureTransaction",
+              amount: amount,
+              payment: {
+                opaqueData,
+              },
+            },
+          },
+        }
+      );
+  
+      if (response.data.messages.resultCode === "Ok") {
+        res.status(200).json({
+          transactionId: response.data.transactionResponse.transId,
+        });
+      } else {
+        throw new Error(response.data.messages.message[0].text);
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  
 
+
+  
   // ======= EMAIL FORWARD ======= //
   app.post('/newPurchase', async (req, res) => {
     const orderData = req.body.orderData
