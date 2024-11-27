@@ -41,12 +41,12 @@
     
   
     try {
-      const response = await axios.post('https://sandbox.affirm.com/api/v2/charges', {
+      const response = await axios.post('https://api.affirm.com/api/v2/charges', {
         checkout_token: checkoutToken,
       }, {
         auth: {
-          username:'ENJBDHG33UOBFFPO', // Affirm sandbox public API key
-          password:'xdLBMW2WoNSmbwjKN9WFh1jVWm3EVEz5', // Affirm sandbox private API key
+          username:AFFIRM_PUBLIC_API_KEY, // Affirm sandbox public API key
+          password:AFFIRM_PRIVATE_API_KEY, // Affirm sandbox private API key
         },
       });
   
@@ -111,7 +111,7 @@
         },
     });
     
-    const handlebarOptions = {
+    const handlebarOptions = {  
         viewEngine: {
             extName: '.handlebars',
             partialsDir: path.resolve('./views'), // Ensure this directory exists
