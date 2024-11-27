@@ -68,7 +68,7 @@
   
     try {
       const response = await axios.post(
-        "https://apitest.authorize.net/xml/v1/request.api", // Use the sandbox endpoint for testing
+        "https://api2.authorize.net/xml/v1/request.api", // Use the sandbox endpoint for testing
         {
           createTransactionRequest: {
             merchantAuthentication: {
