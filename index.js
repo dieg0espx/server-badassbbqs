@@ -65,6 +65,13 @@
   // ======= AUTHORIZE.NET ======= //  
   app.post("/api/payment", async (req, res) => {
     const { opaqueData, amount } = req.body;
+
+    console.log('TRANSACTION KEY:');
+    console.log(AUTHORIZE_TRANSACTION_KEY);
+    console.log('API LOGIN ID');
+    console.log(AUTHORIZE_API_LOGIN_ID);
+    
+    
   
     try {
       const response = await axios.post(
