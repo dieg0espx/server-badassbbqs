@@ -230,7 +230,51 @@
 
   
 
+
+
+
+
+  // TEST
   
+  app.get("/testCredentials", async (req, res) => {
+
+  const testCredentials = async () => {
+      const isProduction = true; // Set to true for production
+      const endpoint = isProduction
+          ? "https://api.authorize.net/xml/v1/request.api"
+          : "https://apitest.authorize.net/xml/v1/request.api";
+
+      const requestData = {
+          authenticateTestRequest: {
+              merchantAuthentication: {
+                  name: process.env.AUTHORIZE_API_LOGIN_ID, // Replace with your API Login ID
+                  transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY, // Replace with your Transaction Key
+              },
+          },
+      };
+
+      try {
+          const response = await axios.post(endpoint, requestData, {
+              headers: { "Content-Type": "application/json" },
+          });
+
+          console.log("Response Data:", response.data);
+          if (response.data.messages.resultCode === "Ok") {
+              console.log("✅ Credentials are valid.");
+          } else {
+              console.error(
+                  "❌ Credentials are invalid:",
+                  response.data.messages.message[0].text
+              );
+          }
+      } catch (error) {
+          console.error("Error testing credentials:", error.message);
+      }
+  };
+
+  testCredentials();
+
+  })
     
   app.listen(8080, () => {
       console.log(`Server running on http://localhost:8080`);
