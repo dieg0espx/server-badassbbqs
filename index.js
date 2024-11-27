@@ -102,42 +102,44 @@
 
   // ======= EMAIL FORWARD ======= //
   app.post('/newPurchase', async (req, res) => {
-    const orderData = req.body.orderData
+    const { orderData, order_id } = req.body; // Destructure the request body
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             user: 'tecnodael@gmail.com',
-            pass: 'fgfqjqbvkmbatyrn'
-        }
+            pass: 'fgfqjqbvkmbatyrn', // Ensure this is a valid app password for Gmail
+        },
     });
-        
+    
     const handlebarOptions = {
-      viewEngine: {
-          extName: '.handlebars',
-          partialsDir: path.resolve('./views'),
-          defaultLayout: false,
-      },
-      viewPath: path.resolve('./views'),
-      extName: '.handlebars',
+        viewEngine: {
+            extName: '.handlebars',
+            partialsDir: path.resolve('./views'), // Ensure this directory exists
+            defaultLayout: false,
+        },
+        viewPath: path.resolve('./views'), // Ensure this directory exists
+        extName: '.handlebars',
     };
     
-    transporter.use('compile', hbs(handlebarOptions));
+    transporter.use('compile', hbs(handlebarOptions)); // Use handlebars with the transporter
+    
     const customerMailOptions = {
-      from: 'tecnodael@gmail.com',
-      to: orderData.email,
-      subject: 'Badass BBQs - Thank You for Your Order!',
-      template: 'newPurchase',
-      context: orderData
+        from: 'tecnodael@gmail.com',
+        to: orderData.email, // Ensure `email` exists in orderData
+        subject: 'Badass BBQs - Thank You for Your Order!',
+        template: 'newPurchase', // Ensure this template file exists in the views directory
+        context: { ...orderData, order_id }, // Pass both orderData and order_id to the template
     };
 
     try {
-      await transporter.sendMail(customerMailOptions);
-      res.status(200).send({ message: 'EMAIL SENT!' });
+        await transporter.sendMail(customerMailOptions);
+        res.status(200).send({ message: 'EMAIL SENT!' });
     } catch (error) {
-      console.error('ERROR SENDING MAIL: ', error);
-      res.send({ message: 'ERROR SENDING MAIL: ' +  error });
+        console.error('ERROR SENDING MAIL: ', error);
+        res.status(500).send({ message: 'ERROR SENDING MAIL: ' + error });
     }
-  });
+});
+
 
   app.post('/contactForm', async (req, res) => {
     const data = req.body.data
