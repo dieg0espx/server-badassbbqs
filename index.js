@@ -126,7 +126,7 @@
     const customerMailOptions = {
         from: 'tecnodael@gmail.com',
         to: orderData.email, // Ensure `email` exists in orderData
-        subject: 'Badass BBQs - Thank You for Your Order!' + order_id,
+        subject: 'Badass BBQs - Thank You for Your Order! - ' + order_id,
         template: 'newPurchase', // Ensure this template file exists in the views directory
         context: { ...orderData, order_id }, // Pass both orderData and order_id to the template
     };
