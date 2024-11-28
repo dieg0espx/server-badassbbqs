@@ -111,12 +111,12 @@
   app.post('/newPurchase', async (req, res) => {
     const { orderData, order_id } = req.body; // Destructure the request body
     const transporter = nodemailer.createTransport({
-        service: 'Outlook',
-        auth: {
-            user: 'badassbbqs@outlook.com',
-            pass: 'jismkjwsbsjirkmp', // Ensure this is a valid app password for Gmail
-        },
-    });
+      service: 'gmail',
+      auth: {
+        user: 'noreplybadassbbqs@gmail.com',
+        pass: 'jghltwotutfwmnty' // Ensure this is secured
+      }
+    });   
     
     const handlebarOptions = {  
         viewEngine: {
@@ -152,14 +152,12 @@ app.post('/contactForm', async (req, res) => {
   const data = req.body.data;
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.office365.com',
-    port: 587,
-    secure: false, // Use STARTTLS
+    service: 'gmail',
     auth: {
-      user: 'badassbbqs@outlook.com',
-      pass: 'jismkjwsbsjirkmp', // Replace with your app password if 2FA is enabled
-    },
-  });
+      user: 'noreplybadassbbqs@gmail.com',
+      pass: 'jghltwotutfwmnty' // Ensure this is secured
+    }
+  });   
 
   // Configure handlebars options
   const handlebarOptions = {
@@ -244,46 +242,46 @@ app.post('/contactForm', async (req, res) => {
 
 
   // TEST
-  
-  app.get("/testCredentials", async (req, res) => {
+  app.post('/sendTest', async (req, res) => {
+    // await getContacts()
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'noreplybadassbbqs@gmail.com',
+              pass: 'jghltwotutfwmnty' // Ensure this is secured
+            }
+        });   
+        const handlebarOptions = {
+            viewEngine: {
+                extName: '.handlebars',
+                partialsDir: path.resolve('./views'),
+                defaultLayout: false,
+            },
+            viewPath: path.resolve('./views'),
+            extName: '.handlebars',
+        };
+        transporter.use('compile', hbs(handlebarOptions));
+        const customerMailOptions = {
+            from: 'info@ttfscaffolding.com',
+            to: 'diego@ttfscaffolding.com', 
+            subject: 'TEST',
+            template: 'newpurchase'
+        };
+        try {
+            await transporter.sendMail(customerMailOptions);
+            res.status(200).send('TEST EMAIL SENT ');
+        } catch (error) {
+            console.error('ERROR SENDIN MAIL: ', error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Error sending emails');
+    }
+});
+    
 
-  const testCredentials = async () => {
-      const isProduction = true; // Set to true for production
-      const endpoint = isProduction
-          ? "https://api.authorize.net/xml/v1/request.api"
-          : "https://apitest.authorize.net/xml/v1/request.api";
 
-      const requestData = {
-          authenticateTestRequest: {
-              merchantAuthentication: {
-                  name: process.env.AUTHORIZE_API_LOGIN_ID, // Replace with your API Login ID
-                  transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY, // Replace with your Transaction Key
-              },
-          },
-      };
-
-      try {
-          const response = await axios.post(endpoint, requestData, {
-              headers: { "Content-Type": "application/json" },
-          });
-
-          console.log("Response Data:", response.data);
-          if (response.data.messages.resultCode === "Ok") {
-              console.log("✅ Credentials are valid.");
-          } else {
-              console.error(
-                  "❌ Credentials are invalid:",
-                  response.data.messages.message[0].text
-              );
-          }
-      } catch (error) {
-          console.error("Error testing credentials:", error.message);
-      }
-  };
-
-  testCredentials();
-
-  })
     
   app.listen(8080, () => {
       console.log(`Server running on http://localhost:8080`);
