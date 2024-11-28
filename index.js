@@ -64,47 +64,95 @@
 
 
   // ======= AUTHORIZE.NET ======= //  
-  app.post("/api/payment", async (req, res) => {
-    const { opaqueData, amount } = req.body;
+  // app.post("/api/payment", async (req, res) => {
+  //   const { opaqueData, amount } = req.body;
 
-    console.log('TRANSACTION KEY:');
-    console.log(process.env.AUTHORIZE_TRANSACTION_KEY);
-    console.log('API LOGIN ID');
-    console.log(process.env.AUTHORIZE_API_LOGIN_ID);
+  //   console.log('TRANSACTION KEY:');
+  //   console.log(process.env.AUTHORIZE_TRANSACTION_KEY);
+  //   console.log('API LOGIN ID');
+  //   console.log(process.env.AUTHORIZE_API_LOGIN_ID);
     
     
   
-    try {
-      const response = await axios.post(
-        "https://api.authorize.net/xml/v1/request.api", // Use the sandbox endpoint for testing
-        {
-          createTransactionRequest: {
-            merchantAuthentication: {
-              name: process.env.AUTHORIZE_API_LOGIN_ID, // API Login ID
-              transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY, // Transaction Key
-            },
-            transactionRequest: {
-              transactionType: "authCaptureTransaction",
-              amount: amount,
-              payment: {
-                opaqueData,
-              },
-            },
-          },
+  //   try {
+  //     const response = await axios.post(
+  //       "https://api.authorize.net/xml/v1/request.api", // Use the sandbox endpoint for testing
+  //       {
+  //         createTransactionRequest: {
+  //           merchantAuthentication: {
+  //             name: process.env.AUTHORIZE_API_LOGIN_ID, // API Login ID
+  //             transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY, // Transaction Key
+  //           },
+  //           transactionRequest: {
+  //             transactionType: "authCaptureTransaction",
+  //             amount: amount,
+  //             payment: {
+  //               opaqueData,
+  //             },
+  //           },
+  //         },
+  //       }
+  //     );
+  
+  //     if (response.data.messages.resultCode === "Ok") {
+  //       res.status(200).json({
+  //         transactionId: response.data.transactionResponse.transId,
+  //       });
+  //     } else {
+  //       throw new Error(response.data.messages.message[0].text);
+  //     }
+  //   } catch (error) {
+  //     res.status(500).json({ error: error.message });
+  //   }
+  // });
+
+    // ======= AUTHORIZE.NET ======= //  
+    app.post("/api/payment", async (req, res) => {
+      console.log("API Login ID:", process.env.AUTHORIZE_API_LOGIN_ID);
+  console.log("Transaction Key:", process.env.AUTHORIZE_TRANSACTION_KEY);
+      const { opaqueData, amount } = req.body;
+  
+      try {
+        if (!process.env.AUTHORIZE_API_LOGIN_ID || !process.env.AUTHORIZE_TRANSACTION_KEY) {
+          throw new Error("Missing API Login ID or Transaction Key in environment variables.");
         }
-      );
+    
+        console.log("Sending request to Authorize.net...");
+    
+        const response = await axios.post(
+          "https://apitest.authorize.net/xml/v1/request.api",
+          {
+            createTransactionRequest: {
+              merchantAuthentication: {
+                name: process.env.AUTHORIZE_API_LOGIN_ID,
+                transactionKey: process.env.AUTHORIZE_TRANSACTION_KEY,
+              },
+              transactionRequest: {
+                transactionType: "authCaptureTransaction",
+                amount: amount,
+                payment: {
+                  opaqueData,
+                },
+              },
+            }
+          }
+        );
   
-      if (response.data.messages.resultCode === "Ok") {
-        res.status(200).json({
-          transactionId: response.data.transactionResponse.transId,
-        });
-      } else {
-        throw new Error(response.data.messages.message[0].text);
+        if (response.data.messages.resultCode === "Ok") {
+          console.log("Transaction Successful:", response.data.transactionResponse.transId);
+          res.status(200).json({
+            transactionId: response.data.transactionResponse.transId,
+          });
+        } else {
+          console.error("Transaction Failed:", response.data.messages.message[0].text);
+          throw new Error(response.data.messages.message[0].text);
+        }
+      } catch (error) {
+        console.error("Error:", error.message);
+        res.status(500).json({ error: error.message });
       }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
+    });
+  
 
 
 
