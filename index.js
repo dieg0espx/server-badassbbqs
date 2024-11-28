@@ -111,10 +111,10 @@
   app.post('/newPurchase', async (req, res) => {
     const { orderData, order_id } = req.body; // Destructure the request body
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: 'Outlook',
         auth: {
-            user: 'tecnodael@gmail.com',
-            pass: 'fgfqjqbvkmbatyrn', // Ensure this is a valid app password for Gmail
+            user: 'badassbbqs@outlook.com',
+            pass: 'jismkjwsbsjirkmp', // Ensure this is a valid app password for Gmail
         },
     });
     
@@ -151,12 +151,12 @@
   app.post('/contactForm', async (req, res) => {
     const data = req.body.data
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'tecnodael@gmail.com',
-            pass: 'fgfqjqbvkmbatyrn'
-        }
-    });
+      service: 'Outlook',
+      auth: {
+          user: 'badassbbqs@outlook.com',
+          pass: 'jismkjwsbsjirkmp', // Ensure this is a valid app password for Gmail
+      },
+  });
         
     const handlebarOptions = {
       viewEngine: {
