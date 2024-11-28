@@ -175,7 +175,7 @@ app.post('/contactForm', async (req, res) => {
   // Mail options for the customer
   const customerMailOptions = {
     from: 'noreplybadassbbqs@gmail.com',
-    to: 'noreplybadassbbqs@gmail.com',
+    to: 'tecnodael@gmail.com',
     subject: 'Badass BBQs - Contact Form',
     template: 'contactForm',
     context: {
@@ -200,15 +200,11 @@ app.post('/contactForm', async (req, res) => {
 
 
   // ========= OPEN AI ========= //
-
-
-
   const openai = new OpenAI({
     apiKey: process.env.OPEN_AI_SECRET_KEY,
     organization: process.env.OPENAI_ORGANIZATION_ID,
     project: process.env.OPENAI_PROJECT_ID,
   });
-
 
   app.post("/generate-text", async (req, res) => {
     const { prompt } = req.body; // Get the prompt from the request body
@@ -235,54 +231,11 @@ app.post('/contactForm', async (req, res) => {
     }
   });
 
-  
 
 
 
 
-
-  // TEST
-  app.post('/sendTest', async (req, res) => {
-    // await getContacts()
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: 'noreplybadassbbqs@gmail.com',
-              pass: 'jghltwotutfwmnty' // Ensure this is secured
-            }
-        });   
-        const handlebarOptions = {
-            viewEngine: {
-                extName: '.handlebars',
-                partialsDir: path.resolve('./views'),
-                defaultLayout: false,
-            },
-            viewPath: path.resolve('./views'),
-            extName: '.handlebars',
-        };
-        transporter.use('compile', hbs(handlebarOptions));
-        const customerMailOptions = {
-            from: 'info@ttfscaffolding.com',
-            to: 'diego@ttfscaffolding.com', 
-            subject: 'TEST',
-            template: 'newpurchase'
-        };
-        try {
-            await transporter.sendMail(customerMailOptions);
-            res.status(200).send('TEST EMAIL SENT ');
-        } catch (error) {
-            console.error('ERROR SENDIN MAIL: ', error);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Error sending emails');
-    }
-});
-    
-
-
-    
+      
   app.listen(8080, () => {
       console.log(`Server running on http://localhost:8080`);
   });
