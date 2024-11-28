@@ -21,6 +21,7 @@
 
 
 
+
   // ===== AFFIRM ===== //
  
   app.post('/api/confirm-order', (req, res) => {
@@ -67,9 +68,9 @@
     const { opaqueData, amount } = req.body;
 
     console.log('TRANSACTION KEY:');
-    console.log(AUTHORIZE_TRANSACTION_KEY);
+    console.log(process.env.AUTHORIZE_TRANSACTION_KEY);
     console.log('API LOGIN ID');
-    console.log(AUTHORIZE_API_LOGIN_ID);
+    console.log(process.env.AUTHORIZE_API_LOGIN_ID);
     
     
   
