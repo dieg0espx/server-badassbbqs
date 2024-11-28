@@ -148,51 +148,57 @@
 });
 
 
-  app.post('/contactForm', async (req, res) => {
-    const data = req.body.data
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.office365.com',
-      port: 587,
-      secure: false, // Use STARTTLS
-      auth: {
-          user: 'badassbbqs@outlook.com',
-          pass: 'jismkjwsbsjirkmp',
-      },
-   });
-  
-      
-    const handlebarOptions = {
-      viewEngine: {
-          extName: '.handlebars',
-          partialsDir: path.resolve('./views'),
-          defaultLayout: false,
-      },
-      viewPath: path.resolve('./views'),
-      extName: '.handlebars',
-    };
-    
-    transporter.use('compile', hbs(handlebarOptions));
-    const customerMailOptions = {
-      from: 'tecnodael@gmail.com',
-      to: 'tecnodael@gmail.com',
-      subject: 'Badass BBQs - Contact Form',
-      template: 'contactForm',
-      context: {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        message: data.message
-      }
-    };
+app.post('/contactForm', async (req, res) => {
+  const data = req.body.data;
 
-    try {
-      await transporter.sendMail(customerMailOptions);
-      res.status(200).send({ message: 'EMAIL SENT!' });
-    } catch (error) {
-      console.error('ERROR SENDING MAIL: ', error);
-      res.send({ message: 'ERROR SENDING MAIL: ' +  error });
-    }
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.office365.com',
+    port: 587,
+    secure: false, // Use STARTTLS
+    auth: {
+      user: 'badassbbqs@outlook.com',
+      pass: 'jismkjwsbsjirkmp', // Replace with your app password if 2FA is enabled
+    },
   });
+
+  // Configure handlebars options
+  const handlebarOptions = {
+    viewEngine: {
+      extName: '.handlebars',
+      partialsDir: path.resolve('./views'),
+      defaultLayout: false,
+    },
+    viewPath: path.resolve('./views'),
+    extName: '.handlebars',
+  };
+
+  transporter.use('compile', hbs(handlebarOptions));
+
+  // Mail options for the customer
+  const customerMailOptions = {
+    from: 'badassbbqs@outlook.com',
+    to: 'tecnodael@gmail.com',
+    subject: 'Badass BBQs - Contact Form',
+    template: 'contactForm',
+    context: {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      message: data.message,
+    },
+  };
+
+  try {
+    console.log('Sending email...');
+    await transporter.sendMail(customerMailOptions);
+    console.log('Email sent successfully!');
+    res.status(200).send({ message: 'EMAIL SENT!' });
+  } catch (error) {
+    console.error('ERROR SENDING MAIL:', error);
+    res.status(500).send({ message: 'ERROR SENDING MAIL: ' + error.message });
+  }
+});
+
 
 
   // ========= OPEN AI ========= //
