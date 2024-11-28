@@ -151,13 +151,16 @@
   app.post('/contactForm', async (req, res) => {
     const data = req.body.data
     const transporter = nodemailer.createTransport({
-      service: 'Outlook',
+      host: 'smtp.office365.com',
+      port: 587,
+      secure: false, // Use STARTTLS
       auth: {
           user: 'badassbbqs@outlook.com',
-          pass: 'jismkjwsbsjirkmp', // Ensure this is a valid app password for Gmail
+          pass: 'jismkjwsbsjirkmp',
       },
-  });
-        
+   });
+  
+      
     const handlebarOptions = {
       viewEngine: {
           extName: '.handlebars',
