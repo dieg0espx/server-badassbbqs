@@ -174,8 +174,8 @@ app.post('/contactForm', async (req, res) => {
 
   // Mail options for the customer
   const customerMailOptions = {
-    from: 'badassbbqs@outlook.com',
-    to: 'tecnodael@gmail.com',
+    from: 'noreplybadassbbqs@gmail.com',
+    to: 'noreplybadassbbqs@gmail.com',
     subject: 'Badass BBQs - Contact Form',
     template: 'contactForm',
     context: {
