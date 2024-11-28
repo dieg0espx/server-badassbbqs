@@ -131,7 +131,7 @@
     transporter.use('compile', hbs(handlebarOptions)); // Use handlebars with the transporter
     
     const customerMailOptions = {
-        from: 'tecnodael@gmail.com',
+        from: 'noreplybadassbbqs@gmail.com',
         to: orderData.email, // Ensure `email` exists in orderData
         subject: 'Badass BBQs - Thank You for Your Order! - ' + order_id,
         template: 'newPurchase', // Ensure this template file exists in the views directory
