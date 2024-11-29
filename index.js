@@ -62,7 +62,7 @@
     }
   });
 
-
+r
     // ======= AUTHORIZE.NET ======= //  
   app.post("/api/payment", async (req, res) => {
     console.log("API Login ID:", process.env.AUTHORIZE_API_LOGIN_ID);
@@ -77,8 +77,8 @@
       console.log("Sending request to Authorize.net...");
     
       const response = await axios.post(
-        // "https://apitest.authorize.net/xml/v1/request.api",
-        "https://api.authorize.net/xml/v1/request.api",
+        "https://apitest.authorize.net/xml/v1/request.api",
+        // "https://api.authorize.net/xml/v1/request.api",
         {
           createTransactionRequest: {
             merchantAuthentication: {
