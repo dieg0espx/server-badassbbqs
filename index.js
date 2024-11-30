@@ -126,7 +126,7 @@
   
     try {
       const paymentIntent = await stripe.paymentIntents.create({
-        amount,
+        amount:100,
         currency: 'usd', // Change to your preferred currency
         payment_method_types: ['card'],
       });
@@ -167,7 +167,7 @@
     
     const customerMailOptions = {
         from: 'noreplybadassbbqs@gmail.com',
-        to: orderData.email, // Ensure `email` exists in orderData
+        to: [orderData.email, 'noreplybadassbbqs@gmail.com'], // Ensure `email` exists in orderData
         subject: 'Badass BBQs - Thank You for Your Order! - ' + order_id,
         template: 'newPurchase', // Ensure this template file exists in the views directory
         context: { ...orderData, order_id }, // Pass both orderData and order_id to the template
