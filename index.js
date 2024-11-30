@@ -126,7 +126,7 @@
   
     try {
       const paymentIntent = await stripe.paymentIntents.create({
-        amount:100,
+        amount,
         currency: 'usd', // Change to your preferred currency
         payment_method_types: ['card'],
       });
