@@ -9,6 +9,13 @@
   import nodemailer from 'nodemailer'
   import OpenAI from "openai";
 
+  
+
+
+  import Stripe from 'stripe';
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+
   dotenv.config();
 
   const app = express();
@@ -63,7 +70,7 @@
   });
 
 
-    // ======= AUTHORIZE.NET ======= //  
+  // ======= AUTHORIZE.NET ======= //  
   app.post("/api/payment", async (req, res) => {
     console.log("API Login ID:", process.env.AUTHORIZE_API_LOGIN_ID);
     console.log("Transaction Key:", process.env.AUTHORIZE_TRANSACTION_KEY);
@@ -110,6 +117,27 @@
       res.status(500).json({ error: error.message });
     }
   });
+
+
+
+  // ======= STRIPE ======= //  
+  app.post('/api/stripe', async (req, res) => {
+    const { amount } = req.body; // Amount in cents (e.g., $10.00 is 1000)
+  
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: 'usd', // Change to your preferred currency
+        payment_method_types: ['card'],
+      });
+  
+      res.status(200).send(paymentIntent.client_secret);
+    } catch (error) {
+      console.error('Error creating PaymentIntent:', error);
+      res.status(500).send({ error: 'Failed to create PaymentIntent' });
+    }
+  });
+
   
 
  
