@@ -7,6 +7,8 @@
   import hbs from 'nodemailer-express-handlebars';
   import path from 'path';
   import nodemailer from 'nodemailer'
+  import smtpTransport from 'nodemailer-smtp-transport';
+  
   import OpenAI from "openai";
 
   
@@ -145,13 +147,21 @@
   // ======= EMAIL FORWARD ======= //
   app.post('/newPurchase', async (req, res) => {
     const { orderData, order_id } = req.body; // Destructure the request body
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
+   // Create a transporter using SMTP transport for Office365
+   const transporter = nodemailer.createTransport(
+    smtpTransport({
+      host: 'smtp.office365.com', // SMTP server for Outlook
+      port: 587, // Use 587 for STARTTLS
+      secure: false, // Use STARTTLS
       auth: {
-        user: 'noreplybadassbbqs@gmail.com',
-        pass: 'jghltwotutfwmnty' // Ensure this is secured
-      }
-    });   
+        user: 'sales@badassbbqs.com', // Your email address
+        pass: 'vhgpdpzxmhlhkzlx', // App password or email password
+      },
+      tls: {
+        rejectUnauthorized: false, // Optional: Allow self-signed certificates
+      },
+    })
+  );
     
     const handlebarOptions = {  
         viewEngine: {
@@ -166,8 +176,8 @@
     transporter.use('compile', hbs(handlebarOptions)); // Use handlebars with the transporter
     
     const customerMailOptions = {
-        from: 'noreplybadassbbqs@gmail.com',
-        to: [orderData.email, 'noreplybadassbbqs@gmail.com'], // Ensure `email` exists in orderData
+        from: 'sales@badassbbqs.com',
+        to: [orderData.email, 'tecnodael@gmail.com'], // Ensure `email` exists in orderData
         subject: 'Badass BBQs - Thank You for Your Order! - ' + order_id,
         template: 'newPurchase', // Ensure this template file exists in the views directory
         context: { ...orderData, order_id }, // Pass both orderData and order_id to the template
@@ -186,13 +196,21 @@
 app.post('/contactForm', async (req, res) => {
   const data = req.body.data;
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'noreplybadassbbqs@gmail.com',
-      pass: 'jghltwotutfwmnty' // Ensure this is secured
-    }
-  });   
+  // Create a transporter using SMTP transport for Office365
+  const transporter = nodemailer.createTransport(
+    smtpTransport({
+      host: 'smtp.office365.com', // SMTP server for Outlook
+      port: 587, // Use 587 for STARTTLS
+      secure: false, // Use STARTTLS
+      auth: {
+        user: 'sales@badassbbqs.com', // Your email address
+        pass: 'vhgpdpzxmhlhkzlx', // App password or email password
+      },
+      tls: {
+        rejectUnauthorized: false, // Optional: Allow self-signed certificates
+      },
+    })
+  );
 
   // Configure handlebars options
   const handlebarOptions = {
@@ -209,8 +227,8 @@ app.post('/contactForm', async (req, res) => {
 
   // Mail options for the customer
   const customerMailOptions = {
-    from: 'noreplybadassbbqs@gmail.com',
-    to: 'tecnodael@gmail.com',
+    from: 'sales@badassbbqs.com',
+    to: ['tecnodael@gmail.com','sales@badasssbbqs.com'],
     subject: 'Badass BBQs - Contact Form',
     template: 'contactForm',
     context: {
@@ -266,6 +284,63 @@ app.post('/contactForm', async (req, res) => {
     }
   });
 
+
+
+
+
+
+
+  // app.post('/test', async (req, res) => {
+  //   const data = req.body.data;
+
+  //   // Create a transporter using SMTP transport for Office365
+  //   const transporter = nodemailer.createTransport(
+  //     smtpTransport({
+  //       host: 'smtp.office365.com', // SMTP server for Outlook
+  //       port: 587, // Use 587 for STARTTLS
+  //       secure: false, // Use STARTTLS
+  //       auth: {
+  //         user: 'sales@badassbbqs.com', // Your email address
+  //         pass: 'vhgpdpzxmhlhkzlx', // App password or email password
+  //       },
+  //       tls: {
+  //         rejectUnauthorized: false, // Optional: Allow self-signed certificates
+  //       },
+  //     })
+  //   );
+  
+  //   // Configure handlebars options
+  //   const handlebarOptions = {
+  //     viewEngine: {
+  //       extName: '.handlebars',
+  //       partialsDir: path.resolve('./views'), // Directory for templates
+  //       defaultLayout: false,
+  //     },
+  //     viewPath: path.resolve('./views'),
+  //     extName: '.handlebars',
+  //   };
+  
+  //   transporter.use('compile', hbs(handlebarOptions));
+  
+  //   // Mail options for the customer
+  //   const customerMailOptions = {
+  //     from: 'sales@badassbbqs.com', // Sender's email
+  //     to: 'tecnodael@gmail.com', // Recipient's email
+  //     subject: 'Badass BBQs - Contact Form',
+  //     template: 'newPurchase', // Handlebars template file (contactForm.handlebars)
+     
+  //   };
+  
+  //   try {
+  //     console.log('Sending email...');
+  //     await transporter.sendMail(customerMailOptions);
+  //     console.log('Email sent successfully!');
+  //     res.status(200).send({ message: 'EMAIL SENT!' });
+  //   } catch (error) {
+  //     console.error('ERROR SENDING MAIL:', error);
+  //     res.status(500).send({ message: 'ERROR SENDING MAIL: ' + error.message });
+  //   }
+  // });
 
 
 
